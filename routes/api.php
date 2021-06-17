@@ -17,3 +17,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::namespace("Api")->group(function (){
+    $prefix = 'user';
+    $apiController = "UserController@";
+    Route::prefix($prefix)->group(function() use ($apiController){
+        Route::get('/',$apiController . "index");
+    });
+});

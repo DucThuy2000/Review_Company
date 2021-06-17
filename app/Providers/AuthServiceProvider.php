@@ -25,6 +25,16 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::before(function ($user){
+           $roles = $user -> roles;
+           foreach ($roles as $key => $value){
+               $permissions = json_decode($value -> permissions,true);
+               foreach ($permissions as $request => $on){
+                   Gate::define($request, function () use ($on){
+                       return $on;
+                   });
+               }
+           }
+        });
     }
 }
